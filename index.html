@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Image Dimension to Ratio Converter</title>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Image Dimension to Ratio Converter</h1>
+            <p>Enter the dimensions of your image and get the simplified aspect ratio. Use the additional tools for more advanced features.</p>
+
+            <!-- Quickly Select Common Aspect Ratios -->
+            <div class="preset-buttons">
+                <button class="preset-btn" data-width="1920" data-height="1080">HD 1080p (1920x1080)</button>
+                <button class="preset-btn" data-width="3840" data-height="2160">4K UHD (3840x2160)</button>
+                <button class="preset-btn" data-width="1280" data-height="720">HD 720p (1280x720)</button>
+                <button class="preset-btn" data-width="1440" data-height="900">WXGA+ (1440x900)</button>
+                <button class="preset-btn" data-width="800" data-height="600">SVGA (800x600)</button>
+                <button class="preset-btn" data-width="2560" data-height="1440">QHD (2560x1440)</button>
+            </div>
+
+            <!-- Enter width, height and choose unit for either pixels or inches -->
+            <div class="input-group">
+                <div class="input-field">
+                    <label for="width">Width</label>
+                    <input type="number" id="width" placeholder="e.g., 1920" min="1">
+                    <div class="error" id="width-error">Please enter a valid width</div>
+                </div>
+                
+                <div class="input-field">
+                    <label for="height">Height</label>
+                    <input type="number" id="height" placeholder="e.g., 1080" min="1">
+                    <div class="error" id="height-error">Please enter a valid height</div>
+                </div>
+                
+                <div class="input-field">
+                    <label for="unit">Unit</label>
+                    <select id="unit">
+                        <option value="pixels">Pixels</option>
+                        <option value="inches">Inches</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Calculates the ratio and displays the result -->
+            <div class="action-buttons">
+                <button class="btn" id="calculate-btn">Calculate Ratio</button>
+
+            <!-- Swaps the width and height -->
+                <button class="btn btn-secondary" id="swap-btn">Swap Width & Height</button>
+
+            <!-- Clears the input fields -->
+                <button class="btn btn-secondary" id="clear-btn">Clear Fields</button>
+            </div>
+
+            <!-- Show additional options/tools; add as needed -->
+            <div class="tools-section" id="additional-tools" style="display: none;">
+                <h3>Additional Tools</h3>
+            
+            <!-- Option to upload an image and get its dimensions -->
+                <div class="file-input-container">
+                    <label class="file-input-label">Upload Image to Extract Dimensions
+                        <input type="file" id="image-upload" accept="image/*">
+                    </label>
+                </div>
+                
+                <div class="ppi-section">
+                    <h3>Unit Conversion</h3>
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="ppi">Pixels Per Inch (PPI/DPI)</label>
+                            <input type="number" id="ppi" value="72" min="1">
+                        </div>
+                    </div>
+                    <div class="conversion-results" id="conversion-result"></div>
+                </div>
+            </div>
+
+            <div class="toggle-section">
+                <button class="toggle-btn" id="toggle-tools">Show Additional Tools</button>
+            </div>
+
+            <div class="result-box" id="result-box" style="display: none;">
+                <h2>Aspect Ratio</h2>
+                <div class="result-value" id="ratio-result">16:9</div>
+                <div id="decimal-ratio">1.78:1</div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-small btn-success" id="copy-ratio">Copy Ratio</button>
+                    <button class="btn btn-small" id="add-to-history">Save to History</button>
+                </div>
+
+                <div class="visual-representation">
+                    <div class="ratio-box" id="ratio-visualization"></div>
+                </div>
+
+                <div class="common-ratios">
+                    <h3>Common Aspect Ratios</h3>
+                    <p id="common-ratio-match">Your ratio is equivalent to the standard 16:9 widescreen format.</p>
+                </div>
+
+                <div class="resolution-info" id="resolution-info">
+                    <h3>Resolution Information</h3>
+                    <p id="megapixels">Megapixels: 2.1 MP</p>
+                    <p id="file-size">Estimated file size (uncompressed): ~6.2 MB</p>
+                </div>
+
+                <p class="note">Note: The aspect ratio is displayed in its simplest form.</p>
+            </div>
+        </div>
+
+        <div class="card" id="history-card" style="display: none;">
+            <h2>Conversion History</h2>
+            <div id="history-list">
+                <!-- History items will be added here -->
+            </div>
+            <button class="btn btn-secondary" id="clear-history" style="margin-top: 15px;">Clear History</button>
+        </div>
+        
+        <!-- Convert multiple dimensions at once. Enter one set of dimensions per line in the format "width x height" (e.g., "1920x1080"). -->
+        <div class="card">
+            <h2>Batch Converter</h2>
+            <p>Convert multiple dimensions at once. Enter one set of dimensions per line in the format "width x height" (e.g., "1920x1080").</p>
+            
+            <div class="input-field">
+                <label for="batch-input">Multiple Dimensions</label>
+                <textarea id="batch-input" rows="5" placeholder="1920x1080&#10;1280x720&#10;800x600&#10;3840x2160" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--border-radius);"></textarea>
+            </div>
+            
+            <button class="btn" id="batch-convert-btn" style="margin-top: 15px;">Convert All</button>
+            
+            <div id="batch-results" style="margin-top: 20px; display: none;">
+                <h3>Batch Results</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background-color: var(--secondary-color);">
+                            <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">Dimensions</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">Aspect Ratio</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">Decimal</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">Common Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batch-results-body">
+                        <!-- Results will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast-message">Copied to clipboard!</div>
+    <script src="js/script.js"></script>
+</body>
+</html>
